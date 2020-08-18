@@ -17,7 +17,7 @@ This uses Markdown-It parser in the backend
 >
 > - `Using the installer bundle`
 > - either run `npm run make` in cloned repo (requires rpmbuild binary) or
-> - use one of the dist files
+> - use one of the `dist/out/make/` files for your platform
 
 ### Few features:
 
