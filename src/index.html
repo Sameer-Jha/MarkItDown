@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mark It Down</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/2.4.1/lodash.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/highlight.js/9.1.0/styles/github.min.css"
+    />
+    <script src="markdown-it.js"></script>
+    <script src="https://twemoji.maxcdn.com/twemoji.min.js"></script>
+    <link rel="stylesheet" href="index.css" />
+    <script src="i.js"></script>
+    <!-- Ancient IE support - load shiv & kill broken highlighter-->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script>
+        window.hljs = null;
+      </script>
+    <![endif]-->
+    <!-- GA counter-->
+  </head>
+  <body>
+    <div class="container">
+      <h4>Mark It Down <small>v0.2(Alpha)</small></h4>
+      <button class="btn btn-primary" id='options'>Options</button>
+      <div class="menu">
+        <ul>
+          <li>
+            <div class="form-inline demo-options">
+            <div class="checkbox not-strict">
+              <label class="_tip" title="enable html tags in source text">
+                <input id="html" type="checkbox"> html
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="checkbox not-strict">
+              <label
+                class="_tip"
+                title="produce xtml output (add / to single tags (&lt;br /&gt; instead of &lt;br&gt;)"
+              >
+                <input id="xhtmlOut" type="checkbox"> xhtmlOut
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="checkbox not-strict">
+              <label
+                class="_tip"
+                title="newlines in paragraphs are rendered as &lt;br&gt;"
+              >
+                <input id="breaks" type="checkbox"> breaks
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="checkbox not-strict">
+              <label class="_tip" title="autoconvert link-like texts to links">
+                <input id="linkify" type="checkbox"> linkify
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="checkbox not-strict">
+              <label
+                class="_tip"
+                title="do typographic replacements, (c) → © and so on"
+              >
+                <input id="typographer" type="checkbox"> typographer
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="checkbox not-strict">
+              <label
+                class="_tip"
+                title="enable output highlight for fenced blocks"
+              >
+                <input id="_highlight" type="checkbox"> highlight
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="form-group not-strict">
+              <input
+                class="form-control _tip"
+                id="langPrefix"
+                type="input"
+                placeholder="language prefix"
+                title="css class language prefix for fenced code blocks"
+              >
+            </div>
+          </li>
+          <li>
+            <div class="checkbox">
+              <label
+                class="_tip"
+                title="force strict CommonMark mode - output will be equal to reference parser"
+              >
+                <input id="_strict" type="checkbox" > CommonMark strict
+              </label>
+            </div>
+            </li>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <div class="container full-height">
+      <div class="row full-height">
+        <div class="col-xs-6 full-height">
+          <div class="demo-control">
+            <a class="source-clear" href="#">clear</a
+            >
+          </div>
+          <textarea class="source full-height"></textarea>
+        </div>
+        <section class="col-xs-6 full-height">
+          <div class="demo-control">
+            <a href="#" data-result-as="html">html</a
+            ><a href="#" data-result-as="src">source</a
+            ><a href="#" data-result-as="debug">debug</a>
+          </div>
+          <div class="result-html full-height"></div>
+          <pre
+            class="hljs result-src full-height"
+          ><code class="result-src-content full-height"></code></pre>
+          <pre
+            class="hljs result-debug full-height"
+          ><code class="result-debug-content full-height"></code></pre>
+        </section>
+      </div>
+    </div>
+    <script>
+      menu = document.querySelector('.menu')
+      menu.style.display='none'
+      function toggle() {
+        menu = document.querySelector('.menu')
+        console.log('Clicked')
+        if(menu.style.display == 'block'){
+          menu.style.display = 'none'
+        }
+        else if(menu.style.display == 'none'){
+          menu.style.display = 'block'
+        }
+      }
+
+      button = document.querySelector('button')
+      button.addEventListener("click", toggle);
+
+    </script>
+
+    <script>
+    const {dialog} = require('electron').remote;
+    var fs = require('fs');
+
+      export default {
+        methods: {
+          save: function () {
+            var content = document.getElementsByClassName('source').innerHTML
+            var options = {
+              title: "Save file",
+              defaultPath : "my_filename",
+              buttonLabel : "Save",
+
+              filters :[
+                {name: 'txt', extensions: ['txt',]},
+                {name: 'All Files', extensions: ['*']}
+              ]
+            }
+
+            dialog.showSaveDialog( options, (filename) => {
+              fs.writeFileSync(filename, content, 'utf-8');
+            })
+          },
+        }
+      }
+    </script>
+  </body>
+</html>
